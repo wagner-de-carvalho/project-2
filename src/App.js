@@ -2,8 +2,14 @@
 import './App.css';
 import { useState, useEffect } from 'react';
 
+const eventFn = () => {
+  console.log('h1 clicado');
+};
+
 function App() {
   const [counter, setCounter] = useState(0);
+  const [counter2, setCounter2] = useState(0);
+
   // const [reverse, setReverse] = useState(false);
   // const [counter, setCounter] = useState(0);
   // const reverseClass = reverse ? 'reverse' : '';
@@ -39,15 +45,29 @@ function App() {
     console.log('ComponentDidUpdate');
   });
 
-  // ComponentDidUpdate - executa uma vez
+  // ComponentDidMount - executa uma vez
   useEffect(() => {
-    console.log('ComponentDidMount');
+    document.querySelector('h1')?.addEventListener('click', eventFn);
+    return () => {
+      // ComponentWillAmount - limpeza
+      document.querySelector('h1')?.removeEventListener('click', eventFn);
+    };
   }, []);
+
+  // ComponentDidMount - executa toda vez que dependência mudar
+  useEffect(() => {
+    console.log('C1: ', counter, 'C2:', counter2);
+  }, [counter, counter2]);
 
   return (
     <div>
+      <p>
+        C1: {counter}
+        C2: {counter2}
+      </p>
       <h1>Contador: {counter}</h1>
       <button onClick={() => setCounter(counter + 1)}>+</button>
+      <button onClick={() => setCounter2(counter2 + 1)}>+[2]</button>
     </div>
   );
 }
